@@ -25,7 +25,7 @@
   - [3.0 RAG Intro](./chapters/300-rag/300-rag-intro.md) 
   - [3.1 RAG Theory Vectors and Embeddings](./chapters/300-rag/301-rag-theory-vectors-and-embeddings.md) 
   - [3.2 RAG Document Vectors and Parsing](./chapters/300-rag/302-rag-document-vectors-and-parsing.md) 
-  - [3.3 RAG Structure Extraction](./chapters/300-rag/303-rag-structured-extraction.md)
+  - [3.3 RAG Structured Extraction](./chapters/300-rag/303-rag-structured-extraction.md)
 - Agent Orchestration
   - [4.0 Agent Orchestration Intro](./chapters/400-agent-orchestration/400-agent-orchestration-intro.md)
 - Model Context Protocol (MCP)
