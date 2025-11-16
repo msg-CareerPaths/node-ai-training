@@ -1,0 +1,203 @@
+<section class="space-y-6">
+  <header class="flex items-center justify-between gap-4">
+    <h1 class="text-2xl font-semibold text-slate-900">Cart</h1>
+
+    <a mat-button color="primary" [routerLink]="productsLink">
+      <mat-icon class="mr-2">shopping_bag</mat-icon>
+      Continue shopping
+    </a>
+  </header>
+
+  @if (!items() || items()!.length === 0) {
+    <p class="text-sm text-slate-600">
+      Your cart is empty. Browse products and add items to your cart.
+    </p>
+  } @else {
+    <mat-card class="overflow-x-auto">
+      <table mat-table [dataSource]="items()!" class="min-w-full">
+        <ng-container matColumnDef="product">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500"
+          >
+            Product
+          </th>
+          <td mat-cell *matCellDef="let item" class="text-sm text-slate-800">
+            <div class="flex items-center gap-3">
+              <img
+                [src]="item.product.image"
+                [alt]="item.product.name"
+                class="h-12 w-12 rounded-md object-cover"
+                loading="lazy"
+              />
+              <div>
+                <p class="font-semibold">{{ item.product.name }}</p>
+                <p class="text-xs text-slate-500">{{ item.product.category }}</p>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-right text-xs font-semibold uppercase tracking-wide text-slate-500"
+          >
+            Price
+          </th>
+          <td mat-cell *matCellDef="let item" class="text-right text-sm text-slate-800">
+            {{ item.product.price | currency }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-center text-xs font-semibold uppercase tracking-wide text-slate-500"
+          >
+            Quantity
+          </th>
+          <td mat-cell *matCellDef="let item" class="text-center text-sm text-slate-800">
+            <div class="inline-flex items-center gap-2">
+              <button
+                mat-icon-button
+                type="button"
+                (click)="onDecreaseQuantity(item.product.id)"
+                aria-label="Decrease quantity"
+              >
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="w-6 text-center">{{ item.quantity }}</span>
+              <button
+                mat-icon-button
+                type="button"
+                (click)="onIncreaseQuantity(item.product.id)"
+                aria-label="Increase quantity"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="subtotal">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-right text-xs font-semibold uppercase tracking-wide text-slate-500"
+          >
+            Subtotal
+          </th>
+          <td mat-cell *matCellDef="let item" class="text-right text-sm text-slate-800">
+            {{ item.product.price * item.quantity | currency }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-right text-xs font-semibold uppercase tracking-wide text-slate-500"
+          >
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let item" class="text-right">
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="onRemove(item.product.id)"
+              aria-label="Remove item"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-card>
+
+    <section class="grid gap-4 md:grid-cols-3">
+      <div class="md:col-span-2"></div>
+
+      <mat-card class="space-y-4 p-4">
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-slate-600">Items</span>
+          <span class="font-medium text-slate-900">
+            {{ items()!.length }}
+          </span>
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-slate-600">Estimated total (local)</span>
+          <span class="font-semibold text-slate-900">
+            {{ total() | currency }}
+          </span>
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-slate-600">Server total</span>
+          <span class="font-semibold text-slate-900">
+            @if (isCalculating()) {
+              Calculating...
+            } @else {
+              {{ total() | currency }}
+            }
+          </span>
+        </div>
+
+        @if (calculateError()) {
+          <p
+            class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800"
+            role="alert"
+          >
+            {{ calculateError() }}
+          </p>
+        }
+
+        @if (checkoutError()) {
+          <p
+            class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800"
+            role="alert"
+          >
+            {{ checkoutError() }}
+          </p>
+        }
+
+        <div class="flex flex-col gap-2 pt-2">
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="onCalculateTotal()"
+            [disabled]="isCalculating() || !items()!.length"
+          >
+            <mat-icon class="mr-2">calculate</mat-icon>
+            Recalculate total
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="onCheckout()"
+            [disabled]="isCheckingOut() || !items()!.length"
+          >
+            @if (isCheckingOut()) {
+              <mat-spinner diameter="18"></mat-spinner>
+            } @else {
+              <ng-container>
+                <mat-icon class="mr-2">shopping_cart_checkout</mat-icon>
+                Checkout
+              </ng-container>
+            }
+          </button>
+        </div>
+      </mat-card>
+    </section>
+  }
+</section>

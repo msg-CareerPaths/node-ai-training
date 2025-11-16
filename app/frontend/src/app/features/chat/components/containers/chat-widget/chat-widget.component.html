@@ -1,0 +1,59 @@
+<div class="fixed bottom-4 left-4 z-50 flex flex-col items-start gap-2">
+  @if (isOpen()) {
+    <section
+      class="w-96 rounded-lg border border-slate-200 bg-white text-slate-900 shadow-lg"
+      aria-label="Simple chat window"
+    >
+      <header
+        class="flex items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 px-3 py-2"
+      >
+        <h2 class="text-sm font-semibold">Shop Agent</h2>
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleChat()"
+          aria-label="Close chat"
+          class="text-slate-500 hover:text-slate-700"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </header>
+
+      <div
+        class="max-h-80 h-40 overflow-y-auto px-3 py-2 text-xs text-slate-700 flex flex-col gap-2"
+      >
+        <!-- Incoming message (left) -->
+        <p class="self-start bg-neutral-200 text-black p-2 rounded-lg max-w-[75%]">
+          This is a simple chat placeholder message.
+        </p>
+
+        <!-- Outgoing message (right) -->
+        <p class="self-end bg-red-900 text-white p-2 rounded-lg max-w-[75%]">
+          This is a simple chat placeholder message response.
+        </p>
+      </div>
+
+      <form
+        class="flex items-center justify-between gap-2 border-t border-slate-200 px-3 py-2"
+        (submit)="onSubmit($event)"
+      >
+        <mat-form-field class="w-full" appearance="outline">
+          <input matInput type="text" placeholder="Type a message..." aria-label="Type a message" />
+        </mat-form-field>
+        <button mat-icon-button color="primary" type="submit" aria-label="Send message">
+          <mat-icon>send</mat-icon>
+        </button>
+      </form>
+    </section>
+  }
+
+  <button
+    matFab
+    color="primary"
+    type="button"
+    (click)="toggleChat()"
+    [attr.aria-label]="isOpen() ? 'Close chat' : 'Open chat'"
+  >
+    <mat-icon>chat</mat-icon>
+  </button>
+</div>

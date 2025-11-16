@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:18
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: llmbackenduser
+      POSTGRES_PASSWORD: llmbackendpassword
+      POSTGRES_DB: llmshopdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - llm-training-backend-data-volume:/var/lib/postgresql
+#  vector-db:
+#    image: ankane/pgvector
+#    container_name: postgres_db
+#    restart: always
+#    environment:
+#      POSTGRES_USER: llmbackendvectoruser
+#      POSTGRES_PASSWORD: llmbackendvectorpassword
+#      POSTGRES_DB: llmshopvectordb
+#    ports:
+#      - "5435:5432"
+#    volumes:
+#      - llm-training-backend-vector-data-volume:/var/lib/postgresql/data
+volumes:
+  llm-training-backend-data-volume:
+#  llm-training-backend-vector-data-volume:

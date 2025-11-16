@@ -1,0 +1,54 @@
+<mat-toolbar class="px-4 py-2">
+  <div class="flex w-full items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <button matIconButton [routerLink]="productsLink" aria-label="Go to dashboard">
+        <mat-icon>shopping_bag</mat-icon>
+      </button>
+      <span class="text-base font-semibold tracking-tight">LLM Shop</span>
+    </div>
+
+    <nav class="flex flex-1 items-center justify-center gap-2">
+      <a matButton [routerLink]="productsLink" routerLinkActive="font-semibold" class="text-sm">
+        Products
+      </a>
+
+      <a matButton [routerLink]="cartLink" routerLinkActive="font-semibold" class="text-sm">
+        Cart
+      </a>
+
+      <a matButton [routerLink]="ordersLink" routerLinkActive="font-semibold" class="text-sm">
+        Orders
+      </a>
+
+      <a
+        matButton
+        [routerLink]="usersLink"
+        routerLinkActive="font-semibold"
+        class="text-sm"
+        *appHasRole="UserRole.Admin"
+      >
+        Users
+      </a>
+
+      <a
+        matButton
+        [routerLink]="reportsLink"
+        routerLinkActive="font-semibold"
+        class="text-sm"
+        *appHasRole="UserRole.Admin"
+      >
+        Reports
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      @if (currentUser(); as user) {
+        <span class="hidden text-sm sm:inline">
+          {{ user.fullname }}
+        </span>
+      }
+
+      <button matButton="elevated" (click)="onLogout()">Logout</button>
+    </div>
+  </div>
+</mat-toolbar>

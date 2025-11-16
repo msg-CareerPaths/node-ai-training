@@ -1,0 +1,99 @@
+<section class="flex justify-center py-8">
+  <mat-card class="w-full max-w-2xl p-4">
+    <header class="mb-4 flex items-center justify-between gap-4">
+      <h1 class="text-xl font-semibold text-slate-900">
+        {{ isEditMode() ? 'Edit product' : 'Create product' }}
+      </h1>
+
+      <button mat-stroked-button color="primary" type="button" [routerLink]="productsOverviewLink">
+        Back to products
+      </button>
+    </header>
+
+    @if (isLoadingProduct()) {
+      <div class="flex justify-center py-8">
+        <mat-spinner diameter="40" />
+      </div>
+    } @else {
+      @if (loadError()) {
+        <p
+          class="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          role="alert"
+        >
+          {{ loadError() }}
+        </p>
+      }
+
+      <form class="space-y-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-full">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+          @if (form.controls.name.hasError('required')) {
+            <mat-error> Name is required. </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            @for (category of categories; track category) {
+              <mat-option [value]="category">
+                {{ category }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (form.controls.category.hasError('required')) {
+            <mat-error> Category is required. </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Image URL</mat-label>
+          <input matInput formControlName="image" />
+          @if (form.controls.image.hasError('required')) {
+            <mat-error> Image URL is required. </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Price</mat-label>
+          <input matInput type="number" formControlName="price" />
+          @if (form.controls.price.hasError('required')) {
+            <mat-error> Price is required. </mat-error>
+          }
+          @if (form.controls.price.hasError('min')) {
+            <mat-error> Price must be at least 0.01. </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput rows="4" formControlName="description"></textarea>
+          @if (form.controls.description.hasError('required')) {
+            <mat-error> Description is required. </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="flex justify-end gap-2">
+          <button
+            matButton="text"
+            type="button"
+            [routerLink]="productsOverviewLink"
+            [disabled]="isSubmitting()"
+          >
+            Cancel
+          </button>
+          @if (!isEditMode()) {
+            <button matButton="tonal" type="button" [disabled]="isSubmitting()">
+              <mat-icon>smart_toy</mat-icon>
+              Generate Product
+            </button>
+          }
+          <button matButton="filled" type="submit" [disabled]="isSubmitting()">
+            {{ isEditMode() ? 'Save changes' : 'Create product' }}
+          </button>
+        </div>
+      </form>
+    }
+  </mat-card>
+</section>
