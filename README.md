@@ -1,4 +1,4 @@
-# Node AI Training
+# Node AI Training (DRAFT)
 
 >
 > Note this training assumes you have some previous experience with `Angular`, `Nest.js` and `AWS`.
