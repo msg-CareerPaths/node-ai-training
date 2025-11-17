@@ -64,7 +64,7 @@ Users are seeded via a migration directly, currently there are only 2 users for 
 
 ## Notes
 - If you find any link broken, **please** inform your mentor to give you an alternative.
-- Keep in mind that the videos might present content relating to an **older version** of angular.
+- Keep in mind that the videos might present content relating to **older version** library version.
 - Try to speed up the videos to *1.5x/2x* if you find them too slow.
 - Try to connect to the Backend from the Spring Training if you have training completed (you might need to change the port for your requests)
 
