@@ -12,6 +12,8 @@ import { ChatService } from '../services/chat.service';
 import { ChatMessageDto } from '../dtos/chat-message.dto';
 import { User } from '../../auth/decorators/user.decorator';
 import type { AuthUserData } from '../../auth/types/jwt.types';
+import { mapMessageEntityToDto } from '../utils/mappers/chat.mapper';
+import { MessageType } from '../../../core/enums/message-type.enum';
 
 @ApiBearerAuth()
 @Controller('llm/chat')
@@ -32,8 +34,13 @@ export class ChatController {
     @ApiUnauthorizedResponse({
         description: 'Invalid authentication credentials.'
     })
-    getUserMessages(@User() user: AuthUserData): Promise<ChatMessageDto[]> {
-        return this.chatService.getMessagesForUser(user.id);
+    async getUserMessages(
+        @User() user: AuthUserData
+    ): Promise<ChatMessageDto[]> {
+        const messages = await this.chatService.getMessagesForUser(user.id);
+        return messages.map(message =>
+            mapMessageEntityToDto(message, MessageType.Message, true)
+        );
     }
 
     @Post('clear')

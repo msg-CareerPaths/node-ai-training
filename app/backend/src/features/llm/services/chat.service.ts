@@ -3,9 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MessageEntity } from '../../../core/entities/message.entity';
 import { ChatState } from '../types/chat.state';
-import { ChatMessageDto } from '../dtos/chat-message.dto';
-import { mapMessageEntityToDto } from '../utils/mappers/chat.mapper';
-import { MessageType } from '../../../core/enums/message-type.enum';
 import { MessageSender } from '../../../core/enums/message-sender.enum';
 
 @Injectable()
@@ -15,17 +12,13 @@ export class ChatService {
         private readonly messageRepository: Repository<MessageEntity>
     ) {}
 
-    async getMessagesForUser(userId: string): Promise<ChatMessageDto[]> {
-        const messages = await this.messageRepository
+    async getMessagesForUser(userId: string): Promise<MessageEntity[]> {
+        return await this.messageRepository
             .createQueryBuilder('message')
             .leftJoinAndSelect('message.user', 'user')
             .where('"userId" = :userId', { userId })
             .orderBy('message.timestamp', 'ASC')
             .getMany();
-
-        return messages.map(message =>
-            mapMessageEntityToDto(message, MessageType.Message)
-        );
     }
 
     async clearMessagesForUser(userId: string): Promise<number> {

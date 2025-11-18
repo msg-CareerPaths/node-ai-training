@@ -22,7 +22,8 @@ export function mapMessagePayloadDtoToEntity(
 
 export function mapMessageEntityToDto(
     message: MessageEntity,
-    messageType: MessageType
+    messageType: MessageType,
+    complete = false
 ): ChatMessageDto {
     return {
         id: message.id as string,
@@ -31,7 +32,7 @@ export function mapMessageEntityToDto(
         timestamp: message.timestamp.toISOString(),
         sender: message.sender,
         content: message.content,
-        complete: false,
+        complete,
         messageType
     };
 }
