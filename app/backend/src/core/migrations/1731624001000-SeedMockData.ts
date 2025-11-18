@@ -6,6 +6,7 @@ export class SeedMockData1731624001000 implements MigrationInterface {
     name = 'SeedMockData1731624001000';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query('DELETE FROM "messages"');
         await queryRunner.query('DELETE FROM "order_items"');
         await queryRunner.query('DELETE FROM "orders"');
         await queryRunner.query('DELETE FROM "products"');
@@ -40,11 +41,12 @@ export class SeedMockData1731624001000 implements MigrationInterface {
             'SELECT id, name, price FROM "products"'
         );
 
+        const adminUser = users.find((u: any) => u.username === 'admin');
         const customer = users.find((u: any) => u.username === 'jdoe');
         const phone = products.find((p: any) => p.name === 'Smartphone X');
         const shoes = products.find((p: any) => p.name === 'Running Shoes');
 
-        if (!customer || !phone || !shoes) {
+        if (!adminUser || !customer || !phone || !shoes) {
             return;
         }
 
@@ -68,9 +70,22 @@ export class SeedMockData1731624001000 implements MigrationInterface {
         `,
             [phone.id, phone.price, order.id, shoes.id, shoes.price]
         );
+
+        await queryRunner.query(
+            `
+            INSERT INTO "messages" ("userId", "sender", "groupId", "content")
+            VALUES
+              ($1, 'client', NULL, 'Hey, I''m checking out the demo store. Can you tell me more about the Smartphone X?'),
+              ($1, 'server', NULL, 'Sure! Smartphone X has a great camera, long battery life, and fast performance.'),
+              ($2, 'client', NULL, 'Hi, I want to make sure my recent order went through correctly.'),
+              ($2, 'server', NULL, 'Hi there! I see your order in the system and it''s currently being processed.')
+        `,
+            [adminUser.id, customer.id]
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query('DELETE FROM "messages"');
         await queryRunner.query('DELETE FROM "order_items"');
         await queryRunner.query('DELETE FROM "orders"');
         await queryRunner.query('DELETE FROM "products"');

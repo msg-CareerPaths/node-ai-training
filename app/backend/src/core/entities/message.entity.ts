@@ -1,20 +1,29 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import { MessageSender } from '../enums/message-sender.enum';
+import { UserEntity } from './user.entity';
 
-@Entity()
+@Entity('messages')
 export class MessageEntity {
     @PrimaryGeneratedColumn('uuid')
     id?: string;
 
-    @Column('uuid')
-    userId!: string;
+    @ManyToOne(() => UserEntity, { eager: true })
+    @JoinColumn({ name: 'userId' })
+    user!: UserEntity;
 
-    @Column()
+    @Column({ type: 'timestamptz' })
     timestamp: Date;
 
     @Column({
         type: 'enum',
-        enum: MessageSender
+        enum: MessageSender,
+        enumName: 'message_sender_enum'
     })
     sender!: MessageSender;
 

@@ -21,6 +21,9 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         await queryRunner.query(
             "CREATE TYPE \"report_kind_enum\" AS ENUM ('revenue', 'most_bought_products')"
         );
+        await queryRunner.query(
+            "CREATE TYPE \"message_sender_enum\" AS ENUM ('client', 'server')"
+        );
 
         await queryRunner.query(`
             CREATE TABLE "users" (
@@ -77,8 +80,26 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         `);
 
         await queryRunner.query(`
+            CREATE TABLE "messages" (
+                "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+                "userId" uuid NOT NULL,
+                "timestamp" TIMESTAMPTZ NOT NULL DEFAULT now(),
+                "sender" "message_sender_enum" NOT NULL,
+                "groupId" uuid NULL,
+                "content" text NOT NULL
+            )
+        `);
+
+        await queryRunner.query(`
             ALTER TABLE "orders"
             ADD CONSTRAINT "FK_orders_user"
+            FOREIGN KEY ("userId") REFERENCES "users"("id")
+            ON DELETE NO ACTION ON UPDATE NO ACTION
+        `);
+
+        await queryRunner.query(`
+            ALTER TABLE "messages"
+            ADD CONSTRAINT "FK_messages_user"
             FOREIGN KEY ("userId") REFERENCES "users"("id")
             ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
@@ -100,6 +121,9 @@ export class InitialSchema1731624000000 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
+            'ALTER TABLE "messages" DROP CONSTRAINT "FK_messages_user"'
+        );
+        await queryRunner.query(
             'ALTER TABLE "order_items" DROP CONSTRAINT "FK_order_items_order"'
         );
         await queryRunner.query(
@@ -109,6 +133,7 @@ export class InitialSchema1731624000000 implements MigrationInterface {
             'ALTER TABLE "orders" DROP CONSTRAINT "FK_orders_user"'
         );
 
+        await queryRunner.query('DROP TABLE "messages"');
         await queryRunner.query('DROP TABLE "order_items"');
         await queryRunner.query('DROP TABLE "orders"');
         await queryRunner.query('DROP TABLE "products"');
@@ -120,5 +145,6 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         await queryRunner.query('DROP TYPE "user_role_enum"');
         await queryRunner.query('DROP TYPE "report_type_enum"');
         await queryRunner.query('DROP TYPE "report_kind_enum"');
+        await queryRunner.query('DROP TYPE "message_sender_enum"');
     }
 }
