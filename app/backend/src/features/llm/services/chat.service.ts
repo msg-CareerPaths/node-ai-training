@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { MessageEntity } from '../../../core/entities/message.entity';
-import { LlmChatState } from '../types/llm-chat.state';
+import { ChatState } from '../types/chat.state';
 
 @Injectable()
-export class LlmChatService {
+export class ChatService {
     async handleChatMessage(
         message: MessageEntity,
-        state: LlmChatState
+        state: ChatState
     ): Promise<void> {
         console.log('Implement me');
     }

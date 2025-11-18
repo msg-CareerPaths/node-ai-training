@@ -3,29 +3,26 @@ import {
     WebSocketGateway,
     WsResponse
 } from '@nestjs/websockets';
-import {
-    LlmChatMessageDto,
-    LlmChatMessagePayload
-} from '../dtos/llm-chat-message.dto';
+import { ChatMessageDto, ChatMessagePayload } from '../dtos/chat-message.dto';
 import { map, Observable, of, Subject } from 'rxjs';
 import { MessageEntity } from '../../../core/entities/message.entity';
-import { LlmChatService } from '../services/llm-chat.service';
+import { ChatService } from '../services/chat.service';
 import {
     mapMessageEntityToDto,
     mapMessagePayloadDtoToEntity
-} from '../utils/mappers/llm-chat.mapper';
-import { LlmChatState } from '../types/llm-chat.state';
+} from '../utils/mappers/chat.mapper';
+import { ChatState } from '../types/chat.state';
 import { MessageType } from '../../../core/enums/message-type.enum';
 
 @WebSocketGateway({ namespace: 'ws/llm' })
-export class LlmChatGateway {
-    constructor(private readonly llmChatService: LlmChatService) {}
+export class ChatGateway {
+    constructor(private readonly llmChatService: ChatService) {}
 
     @SubscribeMessage('chat')
     onSessionMessage(
-        message: LlmChatMessagePayload
-    ): Observable<WsResponse<LlmChatMessageDto>> {
-        const chatState: LlmChatState = {
+        message: ChatMessagePayload
+    ): Observable<WsResponse<ChatMessageDto>> {
+        const chatState: ChatState = {
             groupId: crypto.randomUUID(),
             messageStream: new Subject<MessageEntity>(),
             infoStream: new Subject<MessageEntity>()

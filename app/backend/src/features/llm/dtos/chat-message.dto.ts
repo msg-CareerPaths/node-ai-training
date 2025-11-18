@@ -1,7 +1,7 @@
 import { MessageType } from '../../../core/enums/message-type.enum';
 import { MessageSender } from '../../../core/enums/message-sender.enum';
 
-export class LlmChatMessageDto {
+export class ChatMessageDto {
     id: string;
     userId: string;
     groupId: string | null;
@@ -12,7 +12,7 @@ export class LlmChatMessageDto {
     messageType: MessageType;
 }
 
-export class LlmChatMessagePayload {
+export class ChatMessagePayload {
     userId: string;
     content: string;
 }

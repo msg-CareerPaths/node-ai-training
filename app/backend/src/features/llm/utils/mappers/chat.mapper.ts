@@ -1,14 +1,14 @@
 import {
-    LlmChatMessageDto,
-    LlmChatMessagePayload
-} from '../../dtos/llm-chat-message.dto';
+    ChatMessageDto,
+    ChatMessagePayload
+} from '../../dtos/chat-message.dto';
 import { MessageEntity } from '../../../../core/entities/message.entity';
 import { MessageSender } from '../../../../core/enums/message-sender.enum';
 import { MessageType } from '../../../../core/enums/message-type.enum';
 import { UserEntity } from '../../../../core/entities/user.entity';
 
 export function mapMessagePayloadDtoToEntity(
-    dto: LlmChatMessagePayload
+    dto: ChatMessagePayload
 ): MessageEntity {
     return {
         id: undefined,
@@ -23,7 +23,7 @@ export function mapMessagePayloadDtoToEntity(
 export function mapMessageEntityToDto(
     message: MessageEntity,
     messageType: MessageType
-): LlmChatMessageDto {
+): ChatMessageDto {
     return {
         id: message.id as string,
         groupId: message.groupId,
