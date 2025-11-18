@@ -4,7 +4,7 @@ import {
     WsResponse
 } from '@nestjs/websockets';
 import { ChatMessageDto, ChatMessagePayload } from '../dtos/chat-message.dto';
-import { map, Observable, of, Subject } from 'rxjs';
+import { concat, last, map, merge, Observable, Subject, share } from 'rxjs';
 import { MessageEntity } from '../../../core/entities/message.entity';
 import { ChatService } from '../services/chat.service';
 import {
@@ -30,18 +30,37 @@ export class ChatGateway {
         const payloadEntity = mapMessagePayloadDtoToEntity(message);
         void this.llmChatService.handleChatMessage(payloadEntity, chatState);
 
-        const messageResponse = chatState.messageStream
-            .asObservable()
-            .pipe(
-                map(message =>
-                    mapMessageEntityToDto(message, MessageType.Message)
-                )
-            );
-        const infoResponse = chatState.messageStream
-            .asObservable()
-            .pipe(
-                map(message => mapMessageEntityToDto(message, MessageType.Info))
-            );
-        return of();
+        const messageResponse$ = chatState.messageStream.asObservable().pipe(
+            map(entity => mapMessageEntityToDto(entity, MessageType.Message)),
+            share()
+        );
+
+        const messageStream$ = messageResponse$.pipe(
+            map(dto => ({
+                event: 'chat',
+                data: dto
+            }))
+        );
+
+        const messageCompletion$ = messageResponse$.pipe(
+            last(),
+            map(lastDto => ({
+                event: 'chat',
+                data: {
+                    ...lastDto,
+                    complete: true
+                }
+            }))
+        );
+
+        const infoResponse$ = chatState.infoStream.asObservable().pipe(
+            map(entity => mapMessageEntityToDto(entity, MessageType.Info)),
+            map(dto => ({
+                event: 'chat',
+                data: dto
+            }))
+        );
+
+        return merge(messageStream$, messageCompletion$, infoResponse$);
     }
 }

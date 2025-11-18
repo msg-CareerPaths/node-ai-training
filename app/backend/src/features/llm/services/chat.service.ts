@@ -73,5 +73,9 @@ export class ChatService {
 
         // Emit the response on the message stream
         state.messageStream.next(savedResponse);
+
+        // Complete streams to signal the end of this chat cycle
+        state.infoStream.complete();
+        state.messageStream.complete();
     }
 }
