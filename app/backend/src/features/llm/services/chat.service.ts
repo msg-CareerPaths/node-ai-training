@@ -18,6 +18,7 @@ export class ChatService {
     async getMessagesForUser(userId: string): Promise<ChatMessageDto[]> {
         const messages = await this.messageRepository
             .createQueryBuilder('message')
+            .leftJoinAndSelect('message.user', 'user')
             .where('"userId" = :userId', { userId })
             .orderBy('message.timestamp', 'ASC')
             .getMany();
