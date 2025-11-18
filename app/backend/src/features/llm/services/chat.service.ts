@@ -16,7 +16,7 @@ export class ChatService {
         return await this.messageRepository
             .createQueryBuilder('message')
             .leftJoinAndSelect('message.user', 'user')
-            .where('"userId" = :userId', { userId })
+            .where('message."userId" = :userId', { userId })
             .orderBy('message.timestamp', 'ASC')
             .getMany();
     }
@@ -26,7 +26,7 @@ export class ChatService {
             .createQueryBuilder()
             .delete()
             .from(MessageEntity)
-            .where('"userId" = :userId', { userId })
+            .where('\"userId\" = :userId', { userId })
             .execute();
 
         return result.affected ?? 0;
