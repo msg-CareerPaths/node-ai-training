@@ -121,7 +121,6 @@
                 <mat-select
                   [value]="order()!.status"
                   (valueChange)="onStatusChange($event)"
-                  [disabled]="isUpdatingStatus()"
                 >
                   @for (status of availableStatuses; track status) {
                     <mat-option [value]="status">

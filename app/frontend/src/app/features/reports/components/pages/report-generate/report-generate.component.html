@@ -45,12 +45,11 @@
           mat-stroked-button
           type="button"
           [routerLink]="reportsOverviewLink"
-          [disabled]="isSubmitting()"
         >
           Cancel
         </button>
 
-        <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting()">
+        <button mat-flat-button color="primary" type="submit">
           @if (!isSubmitting()) {
             <ng-container> Generate </ng-container>
           } @else {

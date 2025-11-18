@@ -79,17 +79,16 @@
             matButton="text"
             type="button"
             [routerLink]="productsOverviewLink"
-            [disabled]="isSubmitting()"
           >
             Cancel
           </button>
           @if (!isEditMode()) {
-            <button matButton="tonal" type="button" [disabled]="isSubmitting()">
+            <button matButton="tonal" type="button">
               <mat-icon>smart_toy</mat-icon>
               Generate Product
             </button>
           }
-          <button matButton="filled" type="submit" [disabled]="isSubmitting()">
+          <button matButton="filled" type="submit">
             {{ isEditMode() ? 'Save changes' : 'Create product' }}
           </button>
         </div>

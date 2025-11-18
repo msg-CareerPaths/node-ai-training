@@ -8,7 +8,6 @@
         type="button"
         class="border border-slate-200 bg-white"
         (click)="productService.loadAll()"
-        [disabled]="isLoading()"
         aria-label="Reload products"
       >
         <mat-icon>refresh</mat-icon>
