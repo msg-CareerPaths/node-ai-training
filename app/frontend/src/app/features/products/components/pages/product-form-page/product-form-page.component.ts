@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProductService } from '../../../services/product.service';
+import { SupplierService } from '../../../services/supplier.service';
 import { ProductCategory } from '../../../../../core/types/enums/product-category.enum';
 import { AppRoutes } from '../../../../../core/types/routing/app-routes';
 import { CreateProductDto, UpdateProductDto } from '../../../../../core/types/dtos/product.dto';
@@ -45,6 +46,7 @@ import { GenerateModalComponent } from '../../modals/generate-modal.component';
 export class ProductFormPageComponent implements OnInit {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly productService = inject(ProductService);
+  private readonly supplierService = inject(SupplierService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
@@ -57,6 +59,9 @@ export class ProductFormPageComponent implements OnInit {
   readonly productId = signal<string | null>(null);
 
   readonly categories = Object.values(ProductCategory);
+  readonly suppliers = this.supplierService.suppliers.asReadonly();
+  readonly suppliersError = this.supplierService.error.asReadonly();
+  readonly isLoadingSuppliers = this.supplierService.isLoading.asReadonly();
 
   readonly form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(120)]],
@@ -64,6 +69,7 @@ export class ProductFormPageComponent implements OnInit {
     image: ['', [Validators.required, Validators.maxLength(2048)]],
     price: [0, [Validators.required, Validators.min(0.01)]],
     description: ['', [Validators.required, Validators.maxLength(2000)]],
+    supplierId: ['', [Validators.required]],
   });
 
   readonly isEditMode = computed(() => this.productId() !== null);
@@ -75,6 +81,8 @@ export class ProductFormPageComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.supplierService.loadAll();
+
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) {
@@ -102,6 +110,7 @@ export class ProductFormPageComponent implements OnInit {
             image: product.image,
             price: product.price,
             description: product.description,
+            supplierId: product.supplierId,
           });
         },
         error: () => {
@@ -155,6 +164,7 @@ export class ProductFormPageComponent implements OnInit {
       image: rawValue.image,
       price: rawValue.price,
       description: rawValue.description,
+      supplierId: rawValue.supplierId,
     };
 
     this.productService
@@ -184,6 +194,7 @@ export class ProductFormPageComponent implements OnInit {
       image: rawValue.image,
       price: rawValue.price,
       description: rawValue.description,
+      supplierId: rawValue.supplierId,
     };
 
     this.productService
