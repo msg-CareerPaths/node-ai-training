@@ -16,7 +16,7 @@ import { mapMessageEntityToDto } from '../utils/mappers/chat.mapper';
 import { MessageType } from '../../../core/enums/message-type.enum';
 
 @ApiBearerAuth()
-@Controller('llm/chat')
+@Controller('chat')
 @ApiTags('Chat')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ChatController {

@@ -1,10 +1,11 @@
 import {
+    MessageBody,
     SubscribeMessage,
     WebSocketGateway,
     WsResponse
 } from '@nestjs/websockets';
 import { ChatMessageDto, ChatMessagePayload } from '../dtos/chat-message.dto';
-import { last, map, merge, Observable, Subject, share } from 'rxjs';
+import { last, map, merge, Observable, share, Subject } from 'rxjs';
 import { MessageEntity } from '../../../core/entities/message.entity';
 import { ChatService } from '../services/chat.service';
 import {
@@ -20,6 +21,7 @@ export class ChatGateway {
 
     @SubscribeMessage('chat')
     onSessionMessage(
+        @MessageBody()
         message: ChatMessagePayload
     ): Observable<WsResponse<ChatMessageDto>> {
         const chatState: ChatState = {

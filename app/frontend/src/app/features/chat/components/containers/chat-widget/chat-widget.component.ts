@@ -36,13 +36,14 @@ export class ChatWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.chatService.init();
+    this.chatService.getMessages();
   }
 
-  toggleChat() {
+  protected toggleChat() {
     this.isOpen.update((open) => !open);
   }
 
-  onSubmit(event: Event) {
+  protected onSubmit(event: Event) {
     event.preventDefault();
     const user = this.authService.getUser();
     if (this.messageInput.invalid || !user) {
@@ -50,5 +51,11 @@ export class ChatWidgetComponent implements OnInit {
     }
     const message = this.messageInput.getRawValue();
     this.chatService.sendMessage({ content: message, userId: user.id });
+    this.messageInput.reset();
+  }
+
+  protected onClear(event: Event): void {
+    event.preventDefault();
+    this.chatService.clearMessages();
   }
 }

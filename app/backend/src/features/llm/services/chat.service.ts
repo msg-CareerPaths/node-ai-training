@@ -26,7 +26,7 @@ export class ChatService {
             .createQueryBuilder()
             .delete()
             .from(MessageEntity)
-            .where('\"userId\" = :userId', { userId })
+            .where('"userId" = :userId', { userId })
             .execute();
 
         return result.affected ?? 0;
@@ -46,10 +46,13 @@ export class ChatService {
             groupId: state.groupId,
             timestamp: new Date(),
             sender: MessageSender.Server,
-            content: 'Mock info: your message is being processed.'
+            content: 'Processing.'
         };
 
         state.infoStream.next(infoMessage);
+
+        // simulate delay
+        await this.sleep(2000);
 
         // Create a mock response from the "server"
         const responseMessage: MessageEntity = {
@@ -58,7 +61,7 @@ export class ChatService {
             groupId: state.groupId,
             timestamp: new Date(),
             sender: MessageSender.Server,
-            content: `Mock response: you said "${message.content}".`
+            content: `You said "${message.content}".`
         };
 
         // Persist the response
@@ -71,5 +74,10 @@ export class ChatService {
         // Complete streams to signal the end of this chat cycle
         state.infoStream.complete();
         state.messageStream.complete();
+    }
+
+    // TODO: remove in the actual implementation
+    private sleep(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }

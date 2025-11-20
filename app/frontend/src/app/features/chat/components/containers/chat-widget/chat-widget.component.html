@@ -43,6 +43,15 @@
         (submit)="onSubmit($event)"
       >
         <mat-form-field class="w-full" appearance="outline">
+          <button
+            matIconButton
+            matPrefix
+            class="ml-2 mr-2"
+            aria-label="Clear messages"
+            (click)="onClear($event)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
           <input
             matInput
             type="text"
@@ -50,16 +59,17 @@
             placeholder="Type a message..."
             aria-label="Type a message"
           />
+          <button
+            matIconButton
+            matSuffix
+            class="ml-2 mr-2"
+            type="submit"
+            aria-label="Send message"
+            [disabled]="messageInput.invalid"
+          >
+            <mat-icon>send</mat-icon>
+          </button>
         </mat-form-field>
-        <button
-          mat-icon-button
-          color="primary"
-          type="submit"
-          aria-label="Send message"
-          [disabled]="messageInput.invalid"
-        >
-          <mat-icon>send</mat-icon>
-        </button>
       </form>
     </section>
   }

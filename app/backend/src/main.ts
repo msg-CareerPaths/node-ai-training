@@ -22,7 +22,7 @@ async function bootstrap() {
 
     await app.listen(port);
     Logger.log(
-        `Application is running at: \n REST: http://localhost:${port}/${globalPrefix} \n WSS: ws://localhost:${port}`
+        `Application is running at: \n REST: http://localhost:${port}/${globalPrefix} \n WSS: ws://localhost:${port}/ws`
     );
 }
 bootstrap()
