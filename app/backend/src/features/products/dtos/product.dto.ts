@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ProductCategory } from '../../../core/enums/product-category.enum';
+import { SupplierDto } from './supplier.dto';
 
 export class ProductDto {
     @ApiProperty({ description: 'Product identifier', format: 'uuid' })
@@ -22,4 +23,13 @@ export class ProductDto {
 
     @ApiProperty({ description: 'Detailed product description' })
     description: string;
+
+    @ApiProperty({ description: 'Supplier identifier', format: 'uuid' })
+    supplierId: string;
+
+    @ApiProperty({
+        description: 'Supplier details for the product',
+        type: SupplierDto
+    })
+    supplier: SupplierDto;
 }

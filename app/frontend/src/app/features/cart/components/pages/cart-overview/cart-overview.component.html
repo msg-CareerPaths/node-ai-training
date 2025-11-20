@@ -174,7 +174,7 @@
             mat-stroked-button
             type="button"
             (click)="onCalculateTotal()"
-            [disabled]="isCalculating() || !items()!.length"
+            [disabled]="!items()!.length"
           >
             <mat-icon class="mr-2">calculate</mat-icon>
             Recalculate total
@@ -185,7 +185,7 @@
             color="primary"
             type="button"
             (click)="onCheckout()"
-            [disabled]="isCheckingOut() || !items()!.length"
+            [disabled]="!items()!.length"
           >
             @if (isCheckingOut()) {
               <mat-spinner diameter="18"></mat-spinner>

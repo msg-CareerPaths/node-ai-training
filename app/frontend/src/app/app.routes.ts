@@ -24,8 +24,9 @@ export const routes: Routes = [
     loadChildren: () => import('./features/users/user.routes').then((mod) => mod.UserRoutes),
   },
   {
-    path: AppRoutes.Reports.root,
-    loadChildren: () => import('./features/reports/report.routes').then((mod) => mod.ReportRoutes),
+    path: AppRoutes.Walkthrough.root,
+    loadChildren: () =>
+      import('./features/walkthrough/walkthrough.routes').then((mod) => mod.WalkthroughRoutes),
   },
   {
     path: '**',

@@ -17,11 +17,11 @@
 ## Online Shop
 
 >
-> In the creation product flow on the LLM Shop `frontend`, there is a button to generate a new Product, currently unimplemented.
+> In the creation product flow on the LLM Shop `frontend`, there is a button to generate a new Product, currently unimplemented, only displaying a modal which requires the user to input a description of the product he wants to generate.
 > 
 > You are going to implement it to allow you to quickly generate new products with reasonable data for your shop.
 > 
-> Create a new `GET` endpoint under the `backend` called `/api/llm/products/generate`.
+> Create a new `POST` endpoint under the `backend` called `/api/llm/products/generate`.
 > 
 > Call the LLM model to give you a `structured` output based on an `Zod` Entity schema for a Product, which you are going to create.
 >

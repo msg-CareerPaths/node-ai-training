@@ -19,8 +19,7 @@
   - [1.4 Prompt Tooling](./chapters/100-prompt/104-prompt-tooling.md)
   - [1.5 Prompt Evaluations](./chapters/100-prompt/105-prompt-evaluations.md)
 - Chat and Streaming
-  - [2.0 Chat Intro](./chapters/200-chat/200-chat-intro.md) 
-  - [2.1 Chat LLM Streaming](./chapters/200-chat/201-chat-llm-streaming.md)
+  - [2.0 Chat LLM Streaming](chapters/200-chat/200-chat-llm-streaming.md)
 - Retrieval Augmented Generation (RAG)
   - [3.0 RAG Intro](./chapters/300-rag/300-rag-intro.md) 
   - [3.1 RAG Theory Vectors and Embeddings](./chapters/300-rag/301-rag-theory-vectors-and-embeddings.md) 

@@ -49,7 +49,7 @@
       color="primary"
       type="submit"
       class="mt-2 w-full"
-      [disabled]="isSubmitting() || form.invalid"
+      [disabled]="form.invalid"
     >
       @if (isSubmitting()) {
         Signing in�

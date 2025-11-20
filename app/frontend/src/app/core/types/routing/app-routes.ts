@@ -6,12 +6,9 @@ export const AppRoutes = {
     features: { overview: 'overview', create: 'create', update: 'update' },
   },
   Users: { root: 'users', features: { overview: 'overview' } },
-  Reports: {
-    root: 'reports',
-    features: { overview: 'overview', generate: 'generate' },
-  },
   Orders: {
     root: 'orders',
     features: { overview: 'overview', details: 'details' },
   },
+  Walkthrough: { root: 'walkthrough', features: { overview: 'overview' } },
 } as const;

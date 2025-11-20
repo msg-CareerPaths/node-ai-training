@@ -18,6 +18,12 @@
 >
 > Enhance your previous prompt to create a new product by giving the models some rules to create a more `marketable` description.
 >
+> Adjust the modal on the `frontend` with a new dropdown field where the user can select a `supplier` from the ones available in the database.
+> 
+> Adjust the `backend` endpoint as needed so the supplierId is passed as a new argument, and you can retrieve it from the database.
+> 
+> Use the supplier `brandDescription` to improve the description so the product is more targeted for that specific supplier brand.
+> 
 
 
 ## Further Resources (Optional):

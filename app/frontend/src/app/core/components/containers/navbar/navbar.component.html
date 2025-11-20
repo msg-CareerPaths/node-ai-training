@@ -20,6 +20,10 @@
         Orders
       </a>
 
+      <a matButton [routerLink]="walkthroughLink" routerLinkActive="font-semibold" class="text-sm">
+        Q&A
+      </a>
+
       <a
         matButton
         [routerLink]="usersLink"
@@ -28,16 +32,6 @@
         *appHasRole="UserRole.Admin"
       >
         Users
-      </a>
-
-      <a
-        matButton
-        [routerLink]="reportsLink"
-        routerLinkActive="font-semibold"
-        class="text-sm"
-        *appHasRole="UserRole.Admin"
-      >
-        Reports
       </a>
     </nav>
 

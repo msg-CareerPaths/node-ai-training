@@ -22,7 +22,7 @@
 > 
 > - Health (to check your LLM connection is working)
 > - Generate Product (to generate a product in your chat)
-> - Report Context (when the user is asking data about a specific report, you will use the RAG implementation here)
+> - Q&A Context (when the user is asking data about how to perform an action in the app, you will use the RAG implementation here)
 > - Normal Chat
 > 
 > Create a router node, which based on the user input will decide on which `node` to follow with its functionality (e.g.: Health if asked "Is my LLM connection working?")

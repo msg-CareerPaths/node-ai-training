@@ -6,9 +6,11 @@ export class SeedMockData1731624001000 implements MigrationInterface {
     name = 'SeedMockData1731624001000';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query('DELETE FROM "messages"');
         await queryRunner.query('DELETE FROM "order_items"');
         await queryRunner.query('DELETE FROM "orders"');
         await queryRunner.query('DELETE FROM "products"');
+        await queryRunner.query('DELETE FROM "suppliers"');
         await queryRunner.query('DELETE FROM "users"');
 
         const adminPass = await bcrypt.hash('admin', 10);
@@ -24,13 +26,75 @@ export class SeedMockData1731624001000 implements MigrationInterface {
             ['admin', 'Admin User', adminPass, 'jdoe', 'John Doe', userPass]
         );
 
-        await queryRunner.query(`
-            INSERT INTO "products" ("name", "category", "image", "price", "description")
-            VALUES
-              ('Smartphone X', 'electronics', 'https://picsum.photos/seed/smartphone-x/640/480', 799.99, 'A modern smartphone with great features.'),
-              ('Running Shoes', 'sports', 'https://picsum.photos/seed/running-shoes/640/480', 89.99, 'Lightweight running shoes for daily training.'),
-              ('Coffee Maker', 'home', 'https://picsum.photos/seed/coffee-maker/640/480', 59.99, 'Automatic coffee maker with timer.')
-        `);
+        const suppliers = await queryRunner.query(
+            `
+                INSERT INTO "suppliers" ("name", "brandDescription")
+                VALUES
+                  ('Zenith Electronics', 'Makers of premium smartphones and smart devices for demanding users.'),
+                  ('Velocity Sports', 'Performance footwear and athletic wear focused on everyday runners.'),
+                  ('Brewed Awakenings', 'Home kitchen appliances dedicated to convenient coffee brewing.')
+                RETURNING "id", "name"
+            `
+        );
+
+        const techSupplier = suppliers.find(
+            (supplier: any) => supplier.name === 'Zenith Electronics'
+        );
+        const sportsSupplier = suppliers.find(
+            (supplier: any) => supplier.name === 'Velocity Sports'
+        );
+        const homeSupplier = suppliers.find(
+            (supplier: any) => supplier.name === 'Brewed Awakenings'
+        );
+
+        if (!techSupplier || !sportsSupplier || !homeSupplier) {
+            return;
+        }
+
+        await queryRunner.query(
+            `
+            INSERT INTO "products" ("name", "category", "image", "price", "description", "supplierId")
+            VALUES ($1, $2, $3, $4, $5, $6)
+        `,
+            [
+                'Smartphone X',
+                'electronics',
+                'https://picsum.photos/seed/smartphone-x/640/480',
+                799.99,
+                'A modern smartphone with great features.',
+                techSupplier.id
+            ]
+        );
+
+        await queryRunner.query(
+            `
+            INSERT INTO "products" ("name", "category", "image", "price", "description", "supplierId")
+            VALUES ($1, $2, $3, $4, $5, $6)
+        `,
+            [
+                'Running Shoes',
+                'sports',
+                'https://picsum.photos/seed/running-shoes/640/480',
+                89.99,
+                'Lightweight running shoes for daily training.',
+                sportsSupplier.id
+            ]
+        );
+
+        await queryRunner.query(
+            `
+            INSERT INTO "products" ("name", "category", "image", "price", "description", "supplierId")
+            VALUES ($1, $2, $3, $4, $5, $6)
+        `,
+            [
+                'Coffee Maker',
+                'home',
+                'https://picsum.photos/seed/coffee-maker/640/480',
+                59.99,
+                'Automatic coffee maker with timer.',
+                homeSupplier.id
+            ]
+        );
 
         const users = await queryRunner.query(
             'SELECT id, username FROM "users" WHERE username IN ($1, $2)',
@@ -40,11 +104,12 @@ export class SeedMockData1731624001000 implements MigrationInterface {
             'SELECT id, name, price FROM "products"'
         );
 
+        const adminUser = users.find((u: any) => u.username === 'admin');
         const customer = users.find((u: any) => u.username === 'jdoe');
         const phone = products.find((p: any) => p.name === 'Smartphone X');
         const shoes = products.find((p: any) => p.name === 'Running Shoes');
 
-        if (!customer || !phone || !shoes) {
+        if (!adminUser || !customer || !phone || !shoes) {
             return;
         }
 
@@ -68,12 +133,26 @@ export class SeedMockData1731624001000 implements MigrationInterface {
         `,
             [phone.id, phone.price, order.id, shoes.id, shoes.price]
         );
+
+        await queryRunner.query(
+            `
+            INSERT INTO "messages" ("userId", "sender", "groupId", "content")
+            VALUES
+              ($1, 'client', NULL, 'Hey, I''m checking out the demo store. Can you tell me more about the Smartphone X?'),
+              ($1, 'server', NULL, 'Sure! Smartphone X has a great camera, long battery life, and fast performance.'),
+              ($2, 'client', NULL, 'Hi, I want to make sure my recent order went through correctly.'),
+              ($2, 'server', NULL, 'Hi there! I see your order in the system and it''s currently being processed.')
+        `,
+            [adminUser.id, customer.id]
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query('DELETE FROM "messages"');
         await queryRunner.query('DELETE FROM "order_items"');
         await queryRunner.query('DELETE FROM "orders"');
         await queryRunner.query('DELETE FROM "products"');
+        await queryRunner.query('DELETE FROM "suppliers"');
         await queryRunner.query('DELETE FROM "users"');
     }
 }

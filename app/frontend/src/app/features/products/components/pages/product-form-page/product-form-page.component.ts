@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,12 +16,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProductService } from '../../../services/product.service';
+import { SupplierService } from '../../../services/supplier.service';
 import { ProductCategory } from '../../../../../core/types/enums/product-category.enum';
 import { AppRoutes } from '../../../../../core/types/routing/app-routes';
 import { CreateProductDto, UpdateProductDto } from '../../../../../core/types/dtos/product.dto';
 import { take } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { GenerateModalComponent } from '../../modals/generate-modal.component';
 
 @Component({
   selector: 'app-product-form-page',
@@ -32,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
+    DialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatIconModule,
@@ -42,9 +46,11 @@ import { MatIconModule } from '@angular/material/icon';
 export class ProductFormPageComponent implements OnInit {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly productService = inject(ProductService);
+  private readonly supplierService = inject(SupplierService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(Dialog);
 
   readonly isSubmitting = signal(false);
   readonly isLoadingProduct = signal(false);
@@ -53,6 +59,9 @@ export class ProductFormPageComponent implements OnInit {
   readonly productId = signal<string | null>(null);
 
   readonly categories = Object.values(ProductCategory);
+  readonly suppliers = this.supplierService.suppliers.asReadonly();
+  readonly suppliersError = this.supplierService.error.asReadonly();
+  readonly isLoadingSuppliers = this.supplierService.isLoading.asReadonly();
 
   readonly form = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(120)]],
@@ -60,6 +69,7 @@ export class ProductFormPageComponent implements OnInit {
     image: ['', [Validators.required, Validators.maxLength(2048)]],
     price: [0, [Validators.required, Validators.min(0.01)]],
     description: ['', [Validators.required, Validators.maxLength(2000)]],
+    supplierId: ['', [Validators.required]],
   });
 
   readonly isEditMode = computed(() => this.productId() !== null);
@@ -71,6 +81,8 @@ export class ProductFormPageComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.supplierService.loadAll();
+
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) {
@@ -98,6 +110,7 @@ export class ProductFormPageComponent implements OnInit {
             image: product.image,
             price: product.price,
             description: product.description,
+            supplierId: product.supplierId,
           });
         },
         error: () => {
@@ -122,6 +135,20 @@ export class ProductFormPageComponent implements OnInit {
     this.createProduct();
   }
 
+  protected onGenerate(): void {
+    const dialogRef = this.dialog.open<string | null>(GenerateModalComponent, {
+      height: '400px',
+      width: '600px',
+      disableClose: true,
+    });
+
+    dialogRef.closed.pipe(take(1)).subscribe((data) => {
+      if (data) {
+        console.debug('TODO: Implement me for this text: ', data);
+      }
+    });
+  }
+
   private editProduct(): void {
     const rawValue = this.form.getRawValue();
     const id = this.productId();
@@ -137,6 +164,7 @@ export class ProductFormPageComponent implements OnInit {
       image: rawValue.image,
       price: rawValue.price,
       description: rawValue.description,
+      supplierId: rawValue.supplierId,
     };
 
     this.productService
@@ -166,6 +194,7 @@ export class ProductFormPageComponent implements OnInit {
       image: rawValue.image,
       price: rawValue.price,
       description: rawValue.description,
+      supplierId: rawValue.supplierId,
     };
 
     this.productService

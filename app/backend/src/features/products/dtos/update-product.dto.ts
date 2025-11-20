@@ -5,7 +5,8 @@ import {
     IsNumber,
     IsOptional,
     IsPositive,
-    IsString
+    IsString,
+    IsUUID
 } from 'class-validator';
 import { ProductCategory } from '../../../core/enums/product-category.enum';
 
@@ -43,4 +44,12 @@ export class UpdateProductDto {
     @IsNotEmpty()
     @IsOptional()
     description?: string;
+
+    @ApiPropertyOptional({
+        description: 'Identifier of the product supplier',
+        format: 'uuid'
+    })
+    @IsUUID()
+    @IsOptional()
+    supplierId?: string;
 }

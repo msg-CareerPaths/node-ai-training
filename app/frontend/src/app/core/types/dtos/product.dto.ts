@@ -1,3 +1,5 @@
+import { SupplierDto } from './supplier.dto';
+
 export interface ProductDto {
   id: string;
   name: string;
@@ -5,6 +7,8 @@ export interface ProductDto {
   image: string;
   price: number;
   description: string;
+  supplierId: string;
+  supplier: SupplierDto;
 }
 
 export interface CreateProductDto {
@@ -13,6 +17,7 @@ export interface CreateProductDto {
   image: string;
   price: number;
   description: string;
+  supplierId: string;
 }
 
 export interface UpdateProductDto {
@@ -21,4 +26,5 @@ export interface UpdateProductDto {
   image?: string;
   price?: number;
   description?: string;
+  supplierId?: string;
 }

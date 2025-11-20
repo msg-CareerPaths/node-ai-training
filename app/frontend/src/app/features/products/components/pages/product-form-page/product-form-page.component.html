@@ -24,6 +24,15 @@
         </p>
       }
 
+      @if (suppliersError()) {
+        <p
+          class="mb-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800"
+          role="alert"
+        >
+          {{ suppliersError() }}
+        </p>
+      }
+
       <form class="space-y-4" [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-form-field class="w-full">
           <mat-label>Name</mat-label>
@@ -44,6 +53,26 @@
           </mat-select>
           @if (form.controls.category.hasError('required')) {
             <mat-error> Category is required. </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Supplier</mat-label>
+          <mat-select formControlName="supplierId" [disabled]="isLoadingSuppliers()">
+            @if (isLoadingSuppliers()) {
+              <mat-option value="" disabled>Loading suppliers...</mat-option>
+            } @else if (suppliers()?.length) {
+              @for (supplier of suppliers() ?? []; track supplier.id) {
+                <mat-option [value]="supplier.id">
+                  {{ supplier.name }}
+                </mat-option>
+              }
+            } @else {
+              <mat-option value="" disabled>No suppliers available</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.supplierId.hasError('required')) {
+            <mat-error> Supplier is required. </mat-error>
           }
         </mat-form-field>
 
@@ -75,21 +104,18 @@
         </mat-form-field>
 
         <div class="flex justify-end gap-2">
-          <button
-            matButton="text"
-            type="button"
-            [routerLink]="productsOverviewLink"
-            [disabled]="isSubmitting()"
-          >
-            Cancel
-          </button>
+          <button matButton="text" type="button" [routerLink]="productsOverviewLink">Cancel</button>
           @if (!isEditMode()) {
-            <button matButton="tonal" type="button" [disabled]="isSubmitting()">
+            <button matButton="tonal" type="button" (click)="onGenerate()">
               <mat-icon>smart_toy</mat-icon>
               Generate Product
             </button>
           }
-          <button matButton="filled" type="submit" [disabled]="isSubmitting()">
+          <button
+            matButton="filled"
+            type="submit"
+            [disabled]="isSubmitting() || isLoadingSuppliers()"
+          >
             {{ isEditMode() ? 'Save changes' : 'Create product' }}
           </button>
         </div>

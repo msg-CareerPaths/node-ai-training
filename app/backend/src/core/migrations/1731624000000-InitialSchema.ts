@@ -16,10 +16,7 @@ export class InitialSchema1731624000000 implements MigrationInterface {
             "CREATE TYPE \"order_status_enum\" AS ENUM ('pending', 'confirmed', 'processing', 'shipped', 'out_for_delivery', 'delivered', 'cancelled', 'returned', 'refunded')"
         );
         await queryRunner.query(
-            "CREATE TYPE \"report_type_enum\" AS ENUM ('pdf', 'excel')"
-        );
-        await queryRunner.query(
-            "CREATE TYPE \"report_kind_enum\" AS ENUM ('revenue', 'most_bought_products')"
+            "CREATE TYPE \"message_sender_enum\" AS ENUM ('client', 'server')"
         );
 
         await queryRunner.query(`
@@ -33,13 +30,22 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         `);
 
         await queryRunner.query(`
+            CREATE TABLE "suppliers" (
+                "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+                "name" varchar(255) NOT NULL,
+                "brandDescription" text NOT NULL
+            )
+        `);
+
+        await queryRunner.query(`
             CREATE TABLE "products" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "name" varchar(255) NOT NULL,
                 "category" "product_category_enum" NOT NULL,
                 "image" varchar(255) NOT NULL,
                 "price" numeric NOT NULL,
-                "description" text NOT NULL
+                "description" text NOT NULL,
+                "supplierId" uuid NOT NULL
             )
         `);
 
@@ -65,20 +71,33 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         `);
 
         await queryRunner.query(`
-            CREATE TABLE "reports" (
+            CREATE TABLE "messages" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-                "filename" varchar(255) NOT NULL,
-                "type" "report_type_enum" NOT NULL,
-                "reportKind" "report_kind_enum" NOT NULL,
-                "data" bytea NOT NULL,
-                "createdAt" TIMESTAMPTZ NOT NULL DEFAULT now(),
-                "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT now()
+                "userId" uuid NOT NULL,
+                "timestamp" TIMESTAMPTZ NOT NULL DEFAULT now(),
+                "sender" "message_sender_enum" NOT NULL,
+                "groupId" uuid NULL,
+                "content" text NOT NULL
             )
         `);
 
         await queryRunner.query(`
             ALTER TABLE "orders"
             ADD CONSTRAINT "FK_orders_user"
+            FOREIGN KEY ("userId") REFERENCES "users"("id")
+            ON DELETE NO ACTION ON UPDATE NO ACTION
+        `);
+
+        await queryRunner.query(`
+            ALTER TABLE "products"
+            ADD CONSTRAINT "FK_products_supplier"
+            FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id")
+            ON DELETE NO ACTION ON UPDATE NO ACTION
+        `);
+
+        await queryRunner.query(`
+            ALTER TABLE "messages"
+            ADD CONSTRAINT "FK_messages_user"
             FOREIGN KEY ("userId") REFERENCES "users"("id")
             ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
@@ -100,6 +119,9 @@ export class InitialSchema1731624000000 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
+            'ALTER TABLE "messages" DROP CONSTRAINT "FK_messages_user"'
+        );
+        await queryRunner.query(
             'ALTER TABLE "order_items" DROP CONSTRAINT "FK_order_items_order"'
         );
         await queryRunner.query(
@@ -108,17 +130,20 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         await queryRunner.query(
             'ALTER TABLE "orders" DROP CONSTRAINT "FK_orders_user"'
         );
+        await queryRunner.query(
+            'ALTER TABLE "products" DROP CONSTRAINT "FK_products_supplier"'
+        );
 
+        await queryRunner.query('DROP TABLE "messages"');
         await queryRunner.query('DROP TABLE "order_items"');
         await queryRunner.query('DROP TABLE "orders"');
         await queryRunner.query('DROP TABLE "products"');
+        await queryRunner.query('DROP TABLE "suppliers"');
         await queryRunner.query('DROP TABLE "users"');
-        await queryRunner.query('DROP TABLE "reports"');
 
         await queryRunner.query('DROP TYPE "order_status_enum"');
         await queryRunner.query('DROP TYPE "product_category_enum"');
         await queryRunner.query('DROP TYPE "user_role_enum"');
-        await queryRunner.query('DROP TYPE "report_type_enum"');
-        await queryRunner.query('DROP TYPE "report_kind_enum"');
+        await queryRunner.query('DROP TYPE "message_sender_enum"');
     }
 }
