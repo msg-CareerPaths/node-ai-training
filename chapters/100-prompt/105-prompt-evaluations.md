@@ -20,12 +20,12 @@ There are several ways to follow this chapter (with some advantages and disadvan
   - [LangSmith: DataSet Creation](https://docs.langchain.com/langsmith/manage-datasets-in-application)
   - [LangSmith: Running Evaluations](https://docs.langchain.com/langsmith/run-evaluation-from-prompt-playground)
 - PromptFoo
-  - [PromptFoo: Instalation](https://www.promptfoo.dev/docs/installation/)
+  - [PromptFoo: Installation](https://www.promptfoo.dev/docs/installation/)
   - [PromptFoo: Getting Started](https://www.promptfoo.dev/docs/getting-started/)
 
 **Notes**
 - If using PromptFoo, create a new sub folder under the `app/evaluations/`.
-- If using LangSmith, evaluate inside their provided UI for the moment and show them to your mentor.
+- If using LangSmith, evaluate inside their provided UI for the moment and show them to your mentor. (or you can add them as programmatic files)
 
 ## Online Shop
 

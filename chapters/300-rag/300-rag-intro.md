@@ -7,7 +7,7 @@
 >
 > In the application we have a `Q&A` section for the users, the files are stored statically on the `backend` and served via REST to the frontend.
 > 
-> The `walkthrough` files are either an Excel or a PDF document, displaying instructions on information to navigate the app..
+> The `walkthrough` files are either an Excel or a PDF document, displaying instructions on information for users to navigate the app.
 > 
 > These files are going to bse used in our `RAG` implementation going forward.
 > 
