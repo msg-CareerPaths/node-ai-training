@@ -1,5 +1,5 @@
 <div class="fixed bottom-4 left-4 z-50 flex flex-col items-start gap-2">
-  @if (isOpen()) {
+  @if (isOpen() && initialized()) {
     <section
       class="w-96 rounded-lg border border-slate-200 bg-white text-slate-900 shadow-lg"
       aria-label="Simple chat window"
@@ -22,15 +22,20 @@
       <div
         class="max-h-80 h-40 overflow-y-auto px-3 py-2 text-xs text-slate-700 flex flex-col gap-2"
       >
-        <!-- Incoming message (left) -->
-        <p class="self-start bg-neutral-200 text-black p-2 rounded-lg max-w-[75%]">
-          This is a simple chat placeholder message.
-        </p>
-
-        <!-- Outgoing message (right) -->
-        <p class="self-end bg-red-900 text-white p-2 rounded-lg max-w-[75%]">
-          This is a simple chat placeholder message response.
-        </p>
+        @for (message of messages(); track message.id) {
+          @if (message.sender === MessageSender.Server) {
+            <p class="self-start bg-neutral-200 text-black p-2 rounded-lg max-w-[75%]">
+              {{ message.content }}
+            </p>
+          } @else {
+            <p class="self-end bg-red-900 text-white p-2 rounded-lg max-w-[75%]">
+              {{ message.content }}
+            </p>
+          }
+        }
+        @if (infoMessage(); as info) {
+          <p class="self-end text-sm p-2 max-w-[75%]">{{ info.content }}</p>
+        }
       </div>
 
       <form
@@ -38,9 +43,21 @@
         (submit)="onSubmit($event)"
       >
         <mat-form-field class="w-full" appearance="outline">
-          <input matInput type="text" placeholder="Type a message..." aria-label="Type a message" />
+          <input
+            matInput
+            type="text"
+            [formControl]="messageInput"
+            placeholder="Type a message..."
+            aria-label="Type a message"
+          />
         </mat-form-field>
-        <button mat-icon-button color="primary" type="submit" aria-label="Send message">
+        <button
+          mat-icon-button
+          color="primary"
+          type="submit"
+          aria-label="Send message"
+          [disabled]="messageInput.invalid"
+        >
           <mat-icon>send</mat-icon>
         </button>
       </form>

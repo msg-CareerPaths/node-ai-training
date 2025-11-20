@@ -4,7 +4,7 @@ import {
     WsResponse
 } from '@nestjs/websockets';
 import { ChatMessageDto, ChatMessagePayload } from '../dtos/chat-message.dto';
-import { concat, last, map, merge, Observable, Subject, share } from 'rxjs';
+import { last, map, merge, Observable, Subject, share } from 'rxjs';
 import { MessageEntity } from '../../../core/entities/message.entity';
 import { ChatService } from '../services/chat.service';
 import {

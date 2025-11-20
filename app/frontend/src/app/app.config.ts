@@ -20,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideEnvironmentConfiguration({
       apiUrl: environment.apiUrl,
+      wsUrl: environment.wsUrl,
       production: environment.production,
     }),
     provideRouter(routes, withEnabledBlockingInitialNavigation(), withComponentInputBinding()),
