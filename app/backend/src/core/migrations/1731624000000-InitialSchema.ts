@@ -16,12 +16,6 @@ export class InitialSchema1731624000000 implements MigrationInterface {
             "CREATE TYPE \"order_status_enum\" AS ENUM ('pending', 'confirmed', 'processing', 'shipped', 'out_for_delivery', 'delivered', 'cancelled', 'returned', 'refunded')"
         );
         await queryRunner.query(
-            "CREATE TYPE \"report_type_enum\" AS ENUM ('pdf', 'excel')"
-        );
-        await queryRunner.query(
-            "CREATE TYPE \"report_kind_enum\" AS ENUM ('revenue', 'most_bought_products')"
-        );
-        await queryRunner.query(
             "CREATE TYPE \"message_sender_enum\" AS ENUM ('client', 'server')"
         );
 
@@ -64,18 +58,6 @@ export class InitialSchema1731624000000 implements MigrationInterface {
                 "quantity" integer NOT NULL,
                 "priceAtPurchase" numeric NOT NULL,
                 "orderId" uuid NOT NULL
-            )
-        `);
-
-        await queryRunner.query(`
-            CREATE TABLE "reports" (
-                "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-                "filename" varchar(255) NOT NULL,
-                "type" "report_type_enum" NOT NULL,
-                "reportKind" "report_kind_enum" NOT NULL,
-                "data" bytea NOT NULL,
-                "createdAt" TIMESTAMPTZ NOT NULL DEFAULT now(),
-                "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT now()
             )
         `);
 
@@ -138,13 +120,10 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         await queryRunner.query('DROP TABLE "orders"');
         await queryRunner.query('DROP TABLE "products"');
         await queryRunner.query('DROP TABLE "users"');
-        await queryRunner.query('DROP TABLE "reports"');
 
         await queryRunner.query('DROP TYPE "order_status_enum"');
         await queryRunner.query('DROP TYPE "product_category_enum"');
         await queryRunner.query('DROP TYPE "user_role_enum"');
-        await queryRunner.query('DROP TYPE "report_type_enum"');
-        await queryRunner.query('DROP TYPE "report_kind_enum"');
         await queryRunner.query('DROP TYPE "message_sender_enum"');
     }
 }

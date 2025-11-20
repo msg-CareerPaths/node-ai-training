@@ -3,7 +3,6 @@ import { CoreModule } from './core/core.module';
 import { ProductsModule } from './features/products/products.module';
 import { UsersModule } from './features/users/users.module';
 import { AuthModule } from './features/auth/auth.module';
-import { ReportsModule } from './features/reports/reports.module';
 import { CartModule } from './features/cart/cart.module';
 import { LlmModule } from './features/llm/llm.module';
 
@@ -14,7 +13,6 @@ import { LlmModule } from './features/llm/llm.module';
         UsersModule,
         AuthModule,
         CartModule,
-        ReportsModule,
         LlmModule
     ],
     controllers: [],
