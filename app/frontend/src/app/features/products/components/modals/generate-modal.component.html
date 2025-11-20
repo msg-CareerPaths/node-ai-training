@@ -1,0 +1,23 @@
+<section class="w-full max-w-xl rounded-lg bg-white p-6 shadow-xl">
+  <h2 mat-dialog-title class="text-lg font-semibold text-slate-900">Generate description</h2>
+
+  <div mat-dialog-content class="mt-4 space-y-3">
+    <p class="text-sm text-slate-600">Provide a short description to generate product details.</p>
+
+    <mat-form-field class="w-full">
+      <mat-label>Generation description</mat-label>
+      <textarea
+        matInput
+        rows="4"
+        [value]="description()"
+        (input)="updateDescription($any($event.target).value)"
+        placeholder="Describe what you want to generate"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions class="mt-6 flex justify-end gap-2">
+    <button matButton="text" type="button" (click)="close()">Cancel</button>
+    <button matButton="filled" color="primary" type="button" (click)="submit()">Submit</button>
+  </div>
+</section>

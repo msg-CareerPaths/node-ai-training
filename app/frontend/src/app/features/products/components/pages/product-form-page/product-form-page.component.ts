@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,6 +22,7 @@ import { CreateProductDto, UpdateProductDto } from '../../../../../core/types/dt
 import { take } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { GenerateModalComponent } from '../../modals/generate-modal.component';
 
 @Component({
   selector: 'app-product-form-page',
@@ -32,6 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
+    DialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatIconModule,
@@ -45,6 +48,7 @@ export class ProductFormPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(Dialog);
 
   readonly isSubmitting = signal(false);
   readonly isLoadingProduct = signal(false);
@@ -120,6 +124,14 @@ export class ProductFormPageComponent implements OnInit {
       return;
     }
     this.createProduct();
+  }
+
+  protected onGenerate(): void {
+    this.dialog.open(GenerateModalComponent, {
+      height: '400px',
+      width: '600px',
+      disableClose: true,
+    });
   }
 
   private editProduct(): void {
