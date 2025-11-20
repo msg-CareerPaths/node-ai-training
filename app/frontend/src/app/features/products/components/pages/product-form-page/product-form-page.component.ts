@@ -127,10 +127,16 @@ export class ProductFormPageComponent implements OnInit {
   }
 
   protected onGenerate(): void {
-    this.dialog.open(GenerateModalComponent, {
+    const dialogRef = this.dialog.open<string | null>(GenerateModalComponent, {
       height: '400px',
       width: '600px',
       disableClose: true,
+    });
+
+    dialogRef.closed.pipe(take(1)).subscribe((data) => {
+      if (data) {
+        console.debug('TODO: Implement me for this text: ', data);
+      }
     });
   }
 
