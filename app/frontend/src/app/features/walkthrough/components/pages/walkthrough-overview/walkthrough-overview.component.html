@@ -1,0 +1,68 @@
+<section class="space-y-6">
+  <header class="flex items-center justify-between gap-4">
+    <div class="space-y-1">
+      <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">Q&A</p>
+      <h1 class="text-2xl font-semibold text-slate-900">Guided file downloads</h1>
+    </div>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      class="flex items-center gap-2"
+      (click)="onReload()"
+      aria-label="Reload walkthrough files"
+      [disabled]="isLoading()"
+    >
+      <mat-icon fontIcon="refresh"></mat-icon>
+      Reload
+    </button>
+  </header>
+
+  @if (downloadError()) {
+    <p class="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+      {{ downloadError() }}
+    </p>
+  }
+
+  @if (isLoading()) {
+    <div class="flex justify-center py-12">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else {
+    @if (error()) {
+      <p class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        {{ error() }}
+      </p>
+    }
+
+    @if (!files() || files()!.length === 0) {
+      <p class="text-sm text-slate-600">No walkthrough files are available right now.</p>
+    } @else {
+      <mat-card class="divide-y divide-slate-100 p-0">
+        @for (file of files()!; track file) {
+          <div class="flex items-center justify-between gap-4 px-4 py-3">
+            <div class="flex items-center gap-3">
+              <mat-icon fontIcon="description" class="text-slate-500"></mat-icon>
+              <div class="space-y-0.5">
+                <p class="text-sm font-semibold text-slate-900">{{ file }}</p>
+                <p class="text-xs text-slate-500">Download and follow this guide in the app.</p>
+              </div>
+            </div>
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              class="flex items-center gap-2"
+              (click)="onDownload(file)"
+            >
+              <mat-icon fontIcon="download"></mat-icon>
+              Download
+            </button>
+          </div>
+        }
+      </mat-card>
+    }
+  }
+</section>

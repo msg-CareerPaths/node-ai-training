@@ -23,7 +23,6 @@ export class WsClientService implements OnDestroy {
       }
 
       const url = `${this.environmentConfig.wsUrl}/${namespace}`;
-      console.log(url);
       const socket = io(url, {
         autoConnect: false,
         withCredentials: false,

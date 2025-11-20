@@ -10,4 +10,5 @@ export const AppRoutes = {
     root: 'orders',
     features: { overview: 'overview', details: 'details' },
   },
+  Walkthrough: { root: 'walkthrough', features: { overview: 'overview' } },
 } as const;

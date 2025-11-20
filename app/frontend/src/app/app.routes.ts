@@ -24,6 +24,11 @@ export const routes: Routes = [
     loadChildren: () => import('./features/users/user.routes').then((mod) => mod.UserRoutes),
   },
   {
+    path: AppRoutes.Walkthrough.root,
+    loadChildren: () =>
+      import('./features/walkthrough/walkthrough.routes').then((mod) => mod.WalkthroughRoutes),
+  },
+  {
     path: '**',
     redirectTo: `${AppRoutes.Products.root}/${AppRoutes.Products.features.overview}`,
   },
