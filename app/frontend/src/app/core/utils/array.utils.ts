@@ -1,3 +1,4 @@
+// adds or updates an element in an array by key
 export function upsertByKey<T, K extends keyof T>(array: T[], item: T, key: K): T[] {
   const index = array.findIndex((el) => el[key] === item[key]);
 
@@ -10,6 +11,7 @@ export function upsertByKey<T, K extends keyof T>(array: T[], item: T, key: K): 
   return array;
 }
 
+// adds or overwrites an element in an array by key
 export function setOneByKey<T, K extends keyof T>(array: T[], item: T, key: K): T[] {
   const index = array.findIndex((el) => el[key] === item[key]);
 
