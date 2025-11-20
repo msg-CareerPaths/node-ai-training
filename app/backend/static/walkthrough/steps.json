@@ -1,0 +1,9 @@
+{
+  "title": "LLM Shop Walkthrough",
+  "steps": [
+    { "order": 1, "description": "Browse the catalog and open a few product pages." },
+    { "order": 2, "description": "Add at least two products to your cart." },
+    { "order": 3, "description": "Review your cart, then proceed to checkout." },
+    { "order": 4, "description": "Return to the cart to verify order updates." }
+  ]
+}

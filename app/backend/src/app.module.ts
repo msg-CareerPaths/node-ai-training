@@ -5,6 +5,7 @@ import { UsersModule } from './features/users/users.module';
 import { AuthModule } from './features/auth/auth.module';
 import { CartModule } from './features/cart/cart.module';
 import { LlmModule } from './features/llm/llm.module';
+import { WalkthroughModule } from './features/walkthrough/walkthrough.module';
 
 @Module({
     imports: [
@@ -13,7 +14,8 @@ import { LlmModule } from './features/llm/llm.module';
         UsersModule,
         AuthModule,
         CartModule,
-        LlmModule
+        LlmModule,
+        WalkthroughModule
     ],
     controllers: [],
     providers: []
