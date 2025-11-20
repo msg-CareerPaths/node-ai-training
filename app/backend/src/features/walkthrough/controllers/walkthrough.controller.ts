@@ -1,8 +1,21 @@
-import { Controller, Get, Param, Res, StreamableFile } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Param,
+    Res,
+    StreamableFile,
+    UseGuards
+} from '@nestjs/common';
 import type { Response } from 'express';
 import { WalkthroughService } from '../services/walkthrough.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
+@ApiBearerAuth()
+@ApiTags('Walkthrough')
 @Controller('walkthrough')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class WalkthroughController {
     constructor(private readonly walkthroughService: WalkthroughService) {}
 
