@@ -22,8 +22,8 @@ At a high level, this codebase implements a small e-commerce shop.
 - **Orders**
   - Create an order based on the current cart contents.
   - View a list of past orders and inspect their details.
-- **Reports**
-  - Access report views that aggregate information such as orders, products, or users.
+- **Q&A**
+  - Access documentation to help users navigate the app.
 
 ## Backend (NestJS API)
 

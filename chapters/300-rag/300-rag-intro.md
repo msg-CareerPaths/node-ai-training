@@ -5,15 +5,11 @@
 ## Introductory Note
 
 >
-> Due to relative simple nature of the LLM Shop application, our only "large" documents are to be considered those under our `reports` functionality.
+> In the application we have a `Q&A` section for the users, the files are stored statically on the `backend` and served via REST to the frontend.
 > 
-> The `reports` are either an Excel or a PDF document displaying either the total revenue the shop has made or a list of the most bought products (note: they reports are generated for all existing `orders` in the database, they are not monthly or anything similar).
+> The `walkthrough` files are either an Excel or a PDF document, displaying instructions on information to navigate the app..
 > 
-> IMPORTANT: For the purpose of this training we are considering only the `PDF` version of the documents (due to the lack of availability of loaders for Excel filetype).
-> 
-> These documents are generated when you call the endpoint `POST` `/api/reports` and saved in the Database.
-> 
-> We are going to use them in our `RAG` functionality for simplicity’s sake.
+> These files are going to bse used in our `RAG` implementation going forward.
 > 
 
 ## Mandatory Materials

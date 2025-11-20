@@ -22,7 +22,7 @@
 >
 > You are going to create another endpoint `/api/llm/query` which will search the database based on user prompt. 
 >
-> You will add `tools` to query for the list of all `orders`, `products` and `reports`.
+> You will add `tools` to query for the list of all `orders`, `products` and `walkthrough`.
 > 
 > You will add as context the user id and user role which will be used in the filtering
 >

@@ -41,5 +41,5 @@
 ## Online shop
 
 >
-> When a new `pdf` report is generated, add a step to process, parse, chunk and embed the data into the vector store.
+> Create a new endpoint or create a scheduled job to trigger your `RAG` process, then parse, chunk and embed the data into the vector store.
 >
