@@ -71,6 +71,10 @@ export class ProductService {
         await this.productRepository.remove(existing);
     }
 
+    findAllSuppliers(): Promise<SupplierEntity[]> {
+        return this.supplierRepository.find();
+    }
+
     private async findSupplierOrFail(id: string): Promise<SupplierEntity> {
         const supplier = await this.supplierRepository.findOne({
             where: { id }

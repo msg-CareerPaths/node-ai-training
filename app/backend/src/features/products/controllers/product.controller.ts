@@ -31,6 +31,8 @@ import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../../core/enums/user-roles.enum';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { mapSupplierEntitiesToDtos } from '../utils/mappers/product.mapper';
+import { SupplierDto } from '../dtos/supplier.dto';
 
 @ApiBearerAuth()
 @ApiTags('Products')
@@ -49,6 +51,18 @@ export class ProductController {
     async findAll(): Promise<ProductDto[]> {
         const products = await this.productService.findAll();
         return mapProductEntitiesToDtos(products);
+    }
+
+    @Get('suppliers')
+    @ApiOperation({ summary: 'List all suppliers' })
+    @ApiOkResponse({
+        description: 'Suppliers retrieved',
+        type: SupplierDto,
+        isArray: true
+    })
+    async findAllSuppliers(): Promise<SupplierDto[]> {
+        const suppliers = await this.productService.findAllSuppliers();
+        return mapSupplierEntitiesToDtos(suppliers);
     }
 
     @Get(':id')

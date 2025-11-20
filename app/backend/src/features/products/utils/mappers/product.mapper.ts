@@ -55,10 +55,16 @@ export function mapUpdateProductDtoToPartialEntity(
     };
 }
 
-function mapSupplierEntityToDto(entity: SupplierEntity): SupplierDto {
+export function mapSupplierEntitiesToDtos(
+    entities: SupplierEntity[] = []
+): SupplierDto[] {
+    return entities.map(mapSupplierEntityToDto);
+}
+
+export function mapSupplierEntityToDto(entity?: SupplierEntity): SupplierDto {
     return {
-        id: entity.id || '',
-        name: entity.name,
-        brandDescription: entity.brandDescription
+        id: entity?.id || '',
+        name: entity?.name || '',
+        brandDescription: entity?.brandDescription || ''
     };
 }
