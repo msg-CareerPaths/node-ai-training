@@ -118,10 +118,7 @@
               <h2 class="text-sm font-semibold text-slate-900">Admin: update status</h2>
               <mat-form-field class="w-full">
                 <mat-label>Status</mat-label>
-                <mat-select
-                  [value]="order()!.status"
-                  (valueChange)="onStatusChange($event)"
-                >
+                <mat-select [value]="order()!.status" (valueChange)="onStatusChange($event)">
                   @for (status of availableStatuses; track status) {
                     <mat-option [value]="status">
                       {{ status }}

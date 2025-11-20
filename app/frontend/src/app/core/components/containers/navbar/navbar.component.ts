@@ -32,7 +32,6 @@ export class NavbarComponent {
   readonly cartLink = ['/', AppRoutes.Cart.root, AppRoutes.Cart.features.overview];
   readonly ordersLink = ['/', AppRoutes.Orders.root, AppRoutes.Orders.features.overview];
   readonly usersLink = ['/', AppRoutes.Users.root, AppRoutes.Users.features.overview];
-  readonly reportsLink = ['/', AppRoutes.Reports.root, AppRoutes.Reports.features.overview];
 
   onLogout() {
     this.authService.logout();

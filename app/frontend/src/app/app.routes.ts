@@ -24,10 +24,6 @@ export const routes: Routes = [
     loadChildren: () => import('./features/users/user.routes').then((mod) => mod.UserRoutes),
   },
   {
-    path: AppRoutes.Reports.root,
-    loadChildren: () => import('./features/reports/report.routes').then((mod) => mod.ReportRoutes),
-  },
-  {
     path: '**',
     redirectTo: `${AppRoutes.Products.root}/${AppRoutes.Products.features.overview}`,
   },

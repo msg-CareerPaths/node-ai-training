@@ -75,13 +75,7 @@
         </mat-form-field>
 
         <div class="flex justify-end gap-2">
-          <button
-            matButton="text"
-            type="button"
-            [routerLink]="productsOverviewLink"
-          >
-            Cancel
-          </button>
+          <button matButton="text" type="button" [routerLink]="productsOverviewLink">Cancel</button>
           @if (!isEditMode()) {
             <button matButton="tonal" type="button">
               <mat-icon>smart_toy</mat-icon>
