@@ -30,13 +30,22 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         `);
 
         await queryRunner.query(`
+            CREATE TABLE "suppliers" (
+                "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+                "name" varchar(255) NOT NULL,
+                "brandDescription" text NOT NULL
+            )
+        `);
+
+        await queryRunner.query(`
             CREATE TABLE "products" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "name" varchar(255) NOT NULL,
                 "category" "product_category_enum" NOT NULL,
                 "image" varchar(255) NOT NULL,
                 "price" numeric NOT NULL,
-                "description" text NOT NULL
+                "description" text NOT NULL,
+                "supplierId" uuid NOT NULL
             )
         `);
 
@@ -80,6 +89,13 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         `);
 
         await queryRunner.query(`
+            ALTER TABLE "products"
+            ADD CONSTRAINT "FK_products_supplier"
+            FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id")
+            ON DELETE NO ACTION ON UPDATE NO ACTION
+        `);
+
+        await queryRunner.query(`
             ALTER TABLE "messages"
             ADD CONSTRAINT "FK_messages_user"
             FOREIGN KEY ("userId") REFERENCES "users"("id")
@@ -114,11 +130,15 @@ export class InitialSchema1731624000000 implements MigrationInterface {
         await queryRunner.query(
             'ALTER TABLE "orders" DROP CONSTRAINT "FK_orders_user"'
         );
+        await queryRunner.query(
+            'ALTER TABLE "products" DROP CONSTRAINT "FK_products_supplier"'
+        );
 
         await queryRunner.query('DROP TABLE "messages"');
         await queryRunner.query('DROP TABLE "order_items"');
         await queryRunner.query('DROP TABLE "orders"');
         await queryRunner.query('DROP TABLE "products"');
+        await queryRunner.query('DROP TABLE "suppliers"');
         await queryRunner.query('DROP TABLE "users"');
 
         await queryRunner.query('DROP TYPE "order_status_enum"');

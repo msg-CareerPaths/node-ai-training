@@ -2,6 +2,8 @@ import { ProductDto } from '../../dtos/product.dto';
 import { CreateProductDto } from '../../dtos/create-product.dto';
 import { UpdateProductDto } from '../../dtos/update-product.dto';
 import { ProductEntity } from '../../../../core/entities/product.entity';
+import { SupplierDto } from '../../dtos/supplier.dto';
+import { SupplierEntity } from '../../../../core/entities/supplier.entity';
 
 export function mapProductEntityToDto(
     entity: ProductEntity
@@ -14,7 +16,9 @@ export function mapProductEntityToDto(
         category: entity.category,
         image: entity.image,
         price: entity.price,
-        description: entity.description
+        description: entity.description,
+        supplierId: entity.supplierId,
+        supplier: mapSupplierEntityToDto(entity.supplier)
     };
 }
 
@@ -33,7 +37,8 @@ export function mapCreateProductDtoToEntity(
         category: dto.category,
         image: dto.image,
         price: dto.price,
-        description: dto.description
+        description: dto.description,
+        supplierId: dto.supplierId
     };
 }
 
@@ -45,6 +50,15 @@ export function mapUpdateProductDtoToPartialEntity(
         category: dto.category ?? undefined,
         image: dto.image ?? undefined,
         price: dto.price ?? undefined,
-        description: dto.description ?? undefined
+        description: dto.description ?? undefined,
+        supplierId: dto.supplierId ?? undefined
+    };
+}
+
+function mapSupplierEntityToDto(entity: SupplierEntity): SupplierDto {
+    return {
+        id: entity.id || '',
+        name: entity.name,
+        brandDescription: entity.brandDescription
     };
 }
